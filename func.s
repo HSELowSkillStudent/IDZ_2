@@ -4,7 +4,7 @@
 	.globl	result
 	.bss
 	.align 32
-	.type	result, @object                         # структура struct SIGN {...} result;`
+	.type	result, @object
 	.size	result, 88
 result:
 	.zero	88
@@ -12,148 +12,135 @@ result:
 	.globl	countSignes
 	.type	countSignes, @function
 countSignes:
-        # push    rbx                                     # для size_t i
-        
 	push	rbp
-	mov	rbp, rsp                                # пролог
-	
-	# mov	QWORD PTR -24[rbp], rdi                 # const char *input
-	
-	# mov	QWORD PTR -8[rbp], 0                    # size_t i = 0
-	mov     rsi, 0                                  # заменили на регистр
-	
-	jmp	.L2                                     # for (size_t i; i < SIZE; i++)
-.L18:
-	# mov	rax, QWORD PTR -24[rbp]                 # input (заменил rdx на rax)
-	mov     rax, rdi                                # заменил на регистры
-	# mov	rax, QWORD PTR -8[rbp]                  # i (заменили на регистр)
-	
-	#add	rax, rdx                                # input[i]
-	add	rax, rsi                                # заменили на регистр
-	
-        movzx	eax, BYTE PTR [rax]
-	mov	BYTE PTR -9[rbp], al                    # a = input[i]
-	cmp	BYTE PTR -9[rbp], 0                     # if a == '\0'
-	je	.L19                                    # break
-
-	movsx	eax, BYTE PTR -9[rbp]                   # switch(a) unsigned
+	mov	rbp, rsp
+	mov	QWORD PTR -24[rbp], rdi
+	mov	QWORD PTR -8[rbp], 0
+	jmp	.L2
+.L19:
+	mov	rdx, QWORD PTR -24[rbp]
+	mov	rax, QWORD PTR -8[rbp]
+	add	rax, rdx
+	movzx	eax, BYTE PTR [rax]
+	mov	BYTE PTR -9[rbp], al
+	cmp	BYTE PTR -9[rbp], 0
+	je	.L20
+	movsx	eax, BYTE PTR -9[rbp]
 	sub	eax, 33
-	cmp	eax, 30                                 # получаем, что после преобразований eax хранит значение от 0 до 30+(т.к. unsigned)если eax > 30, то это точно не знак препинания(таблица ascii)
-	ja	.L20                                    # уходим в default(a > '?')
-	mov	eax, eax                                # тут из XXXXeax получаем 0000eax (в rax)
-	lea	rdx, 0[0+rax*4]                         # case'ы
-	lea	rax, .L6[rip]
+	cmp	eax, 30
+	ja	.L21
+	mov	eax, eax
+	lea	rdx, 0[0+rax*4]
+	lea	rax, .L7[rip]
 	mov	eax, DWORD PTR [rdx+rax]
 	cdqe
-	lea	rdx, .L6[rip]
+	lea	rdx, .L7[rip]
 	add	rax, rdx
 	jmp	rax
 	.section	.rodata
 	.align 4
 	.align 4
-.L6:
-	.long	.L16-.L6
-	.long	.L15-.L6
-	.long	.L20-.L6
-	.long	.L20-.L6
-	.long	.L20-.L6
-	.long	.L20-.L6
-	.long	.L14-.L6
-	.long	.L13-.L6
-	.long	.L12-.L6
-	.long	.L20-.L6
-	.long	.L20-.L6
-	.long	.L11-.L6
-	.long	.L10-.L6
-	.long	.L9-.L6
-	.long	.L20-.L6
-	.long	.L20-.L6
-	.long	.L20-.L6
-	.long	.L20-.L6
-	.long	.L20-.L6
-	.long	.L20-.L6
-	.long	.L20-.L6
-	.long	.L20-.L6
-	.long	.L20-.L6
-	.long	.L20-.L6
-	.long	.L20-.L6
-	.long	.L8-.L6
-	.long	.L7-.L6
-	.long	.L20-.L6
-	.long	.L20-.L6
-	.long	.L20-.L6
-	.long	.L5-.L6
+.L7:
+	.long	.L17-.L7
+	.long	.L16-.L7
+	.long	.L21-.L7
+	.long	.L21-.L7
+	.long	.L21-.L7
+	.long	.L21-.L7
+	.long	.L15-.L7
+	.long	.L14-.L7
+	.long	.L13-.L7
+	.long	.L21-.L7
+	.long	.L21-.L7
+	.long	.L12-.L7
+	.long	.L11-.L7
+	.long	.L10-.L7
+	.long	.L21-.L7
+	.long	.L21-.L7
+	.long	.L21-.L7
+	.long	.L21-.L7
+	.long	.L21-.L7
+	.long	.L21-.L7
+	.long	.L21-.L7
+	.long	.L21-.L7
+	.long	.L21-.L7
+	.long	.L21-.L7
+	.long	.L21-.L7
+	.long	.L9-.L7
+	.long	.L8-.L7
+	.long	.L21-.L7
+	.long	.L21-.L7
+	.long	.L21-.L7
+	.long	.L6-.L7
 	.text
-.L9:                                                    # .
+.L10:
 	mov	rax, QWORD PTR result[rip]
 	add	rax, 1
 	mov	QWORD PTR result[rip], rax
-	jmp	.L17
-.L11:                                                   # ,
+	jmp	.L18
+.L12:
 	mov	rax, QWORD PTR result[rip+8]
 	add	rax, 1
 	mov	QWORD PTR result[rip+8], rax
-	jmp	.L17
-.L7:                                                    # ;
+	jmp	.L18
+.L8:
 	mov	rax, QWORD PTR result[rip+16]
 	add	rax, 1
 	mov	QWORD PTR result[rip+16], rax
-	jmp	.L17
-.L8:                                                    # :
+	jmp	.L18
+.L9:
 	mov	rax, QWORD PTR result[rip+24]
 	add	rax, 1
 	mov	QWORD PTR result[rip+24], rax
-	jmp	.L17
-.L16:                                                   # !
+	jmp	.L18
+.L17:
 	mov	rax, QWORD PTR result[rip+32]
 	add	rax, 1
 	mov	QWORD PTR result[rip+32], rax
-	jmp	.L17
-.L5:                                                    # ?
+	jmp	.L18
+.L6:
 	mov	rax, QWORD PTR result[rip+40]
 	add	rax, 1
 	mov	QWORD PTR result[rip+40], rax
-	jmp	.L17
-.L10:                                                   # -
+	jmp	.L18
+.L11:
 	mov	rax, QWORD PTR result[rip+48]
 	add	rax, 1
 	mov	QWORD PTR result[rip+48], rax
-	jmp	.L17
-.L13:                                                   # (
+	jmp	.L18
+.L14:
 	mov	rax, QWORD PTR result[rip+56]
 	add	rax, 1
 	mov	QWORD PTR result[rip+56], rax
-	jmp	.L17
-.L12:                                                   # )
+	jmp	.L18
+.L13:
 	mov	rax, QWORD PTR result[rip+64]
 	add	rax, 1
 	mov	QWORD PTR result[rip+64], rax
-	jmp	.L17
-.L14:                                                   # '
+	jmp	.L18
+.L15:
 	mov	rax, QWORD PTR result[rip+72]
 	add	rax, 1
 	mov	QWORD PTR result[rip+72], rax
-	jmp	.L17
-.L15:                                                   # "
+	jmp	.L18
+.L16:
 	mov	rax, QWORD PTR result[rip+80]
 	add	rax, 1
 	mov	QWORD PTR result[rip+80], rax
-	jmp	.L17
+	jmp	.L18
+.L21:
+	nop
+.L18:
+	add	QWORD PTR -8[rbp], 1
+.L2:
+	cmp	QWORD PTR -8[rbp], 10000
+	jbe	.L19
+	jmp	.L22
 .L20:
 	nop
-.L17:
-	# add	QWORD PTR -8[rbp], 1                    # i++ (для for)
-	add     rsi, 1                                  # заменили на регистр
-.L2:
-	# cmp	QWORD PTR -8[rbp], 10000                # i >= SIZE
-	cmp     rsi, 10000                              # заменил на регистр
-	
-	jbe	.L18                                    # end
-.L19:
+.L22:
 	nop
-	mov     rsp, rbp
 	pop	rbp
-	# pop     rbx
 	ret
 	.size	countSignes, .-countSignes
 	.section	.rodata
@@ -189,7 +176,7 @@ outputStruct:
 	mov	QWORD PTR -8[rbp], rdi
 	mov	rax, QWORD PTR result[rip]
 	test	rax, rax
-	je	.L22
+	je	.L24
 	mov	rdx, QWORD PTR result[rip]
 	mov	rax, QWORD PTR -8[rbp]
 	lea	rcx, .LC0[rip]
@@ -197,10 +184,10 @@ outputStruct:
 	mov	rdi, rax
 	mov	eax, 0
 	call	fprintf@PLT
-.L22:
+.L24:
 	mov	rax, QWORD PTR result[rip+8]
 	test	rax, rax
-	je	.L23
+	je	.L25
 	mov	rdx, QWORD PTR result[rip+8]
 	mov	rax, QWORD PTR -8[rbp]
 	lea	rcx, .LC1[rip]
@@ -208,10 +195,10 @@ outputStruct:
 	mov	rdi, rax
 	mov	eax, 0
 	call	fprintf@PLT
-.L23:
+.L25:
 	mov	rax, QWORD PTR result[rip+16]
 	test	rax, rax
-	je	.L24
+	je	.L26
 	mov	rdx, QWORD PTR result[rip+16]
 	mov	rax, QWORD PTR -8[rbp]
 	lea	rcx, .LC2[rip]
@@ -219,10 +206,10 @@ outputStruct:
 	mov	rdi, rax
 	mov	eax, 0
 	call	fprintf@PLT
-.L24:
+.L26:
 	mov	rax, QWORD PTR result[rip+24]
 	test	rax, rax
-	je	.L25
+	je	.L27
 	mov	rdx, QWORD PTR result[rip+24]
 	mov	rax, QWORD PTR -8[rbp]
 	lea	rcx, .LC3[rip]
@@ -230,10 +217,10 @@ outputStruct:
 	mov	rdi, rax
 	mov	eax, 0
 	call	fprintf@PLT
-.L25:
+.L27:
 	mov	rax, QWORD PTR result[rip+32]
 	test	rax, rax
-	je	.L26
+	je	.L28
 	mov	rdx, QWORD PTR result[rip+32]
 	mov	rax, QWORD PTR -8[rbp]
 	lea	rcx, .LC4[rip]
@@ -241,10 +228,10 @@ outputStruct:
 	mov	rdi, rax
 	mov	eax, 0
 	call	fprintf@PLT
-.L26:
+.L28:
 	mov	rax, QWORD PTR result[rip+40]
 	test	rax, rax
-	je	.L27
+	je	.L29
 	mov	rdx, QWORD PTR result[rip+40]
 	mov	rax, QWORD PTR -8[rbp]
 	lea	rcx, .LC5[rip]
@@ -252,10 +239,10 @@ outputStruct:
 	mov	rdi, rax
 	mov	eax, 0
 	call	fprintf@PLT
-.L27:
+.L29:
 	mov	rax, QWORD PTR result[rip+48]
 	test	rax, rax
-	je	.L28
+	je	.L30
 	mov	rdx, QWORD PTR result[rip+48]
 	mov	rax, QWORD PTR -8[rbp]
 	lea	rcx, .LC6[rip]
@@ -263,10 +250,10 @@ outputStruct:
 	mov	rdi, rax
 	mov	eax, 0
 	call	fprintf@PLT
-.L28:
+.L30:
 	mov	rax, QWORD PTR result[rip+56]
 	test	rax, rax
-	je	.L29
+	je	.L31
 	mov	rdx, QWORD PTR result[rip+56]
 	mov	rax, QWORD PTR -8[rbp]
 	lea	rcx, .LC7[rip]
@@ -274,10 +261,10 @@ outputStruct:
 	mov	rdi, rax
 	mov	eax, 0
 	call	fprintf@PLT
-.L29:
+.L31:
 	mov	rax, QWORD PTR result[rip+64]
 	test	rax, rax
-	je	.L30
+	je	.L32
 	mov	rdx, QWORD PTR result[rip+64]
 	mov	rax, QWORD PTR -8[rbp]
 	lea	rcx, .LC8[rip]
@@ -285,10 +272,10 @@ outputStruct:
 	mov	rdi, rax
 	mov	eax, 0
 	call	fprintf@PLT
-.L30:
+.L32:
 	mov	rax, QWORD PTR result[rip+72]
 	test	rax, rax
-	je	.L31
+	je	.L33
 	mov	rdx, QWORD PTR result[rip+72]
 	mov	rax, QWORD PTR -8[rbp]
 	lea	rcx, .LC9[rip]
@@ -296,10 +283,10 @@ outputStruct:
 	mov	rdi, rax
 	mov	eax, 0
 	call	fprintf@PLT
-.L31:
+.L33:
 	mov	rax, QWORD PTR result[rip+80]
 	test	rax, rax
-	je	.L33
+	je	.L35
 	mov	rdx, QWORD PTR result[rip+80]
 	mov	rax, QWORD PTR -8[rbp]
 	lea	rcx, .LC10[rip]
@@ -307,7 +294,7 @@ outputStruct:
 	mov	rdi, rax
 	mov	eax, 0
 	call	fprintf@PLT
-.L33:
+.L35:
 	nop
 	leave
 	ret
